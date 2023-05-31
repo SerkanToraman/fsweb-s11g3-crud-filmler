@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
-//import useAxios, { REQ_TYPES } from "../endpoints/useAxios";
+import useAxios, { REQ_TYPES } from "../endpoints/useAxios";
 
 import axios from "axios";
 
 const EditMovieForm = (props) => {
   const { push } = useHistory();
   const { id } = useParams();
+  const [getMovie] =useAxios();
+  const [putMovie] =useAxios();
 
   const { setMovies } = props;
   const [movie, setMovie] = useState({
@@ -21,15 +23,21 @@ const EditMovieForm = (props) => {
   // const [editProduct ] = useAxios([]);
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:9000/api/movies/${id}`)
-      .then((res) => {
-        setMovie(res.data);
-      })
-      .catch((err) => {
-        console.log(err.response);
-      });
-  }, []);
+    // axios
+    //   .get(`http://localhost:9000/api/movies/${id}`)
+    //   .then((res) => {
+    //     setMovie(res.data);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err.response);
+    //   });
+    getMovie({
+      endpoint:`movies/${id}`,
+      reqType:REQ_TYPES.GET,
+  }).then((res)=>{
+    setMovie(res);
+  })
+},[]);
 
 
 
@@ -43,15 +51,23 @@ const EditMovieForm = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
-      .put(`http://localhost:9000/api/movies/${id}`, movie)
-      .then((res) => {
-        setMovies(res.data);
-        push(`/movies/${movie.id}`);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // axios
+    //   .put(`http://localhost:9000/api/movies/${id}`, movie)
+    //   .then((res) => {
+    //     setMovies(res.data);
+    //     push(`/movies/${movie.id}`);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+    putMovie({
+      endpoint:`movies/${id}`,
+      reqType:REQ_TYPES.PUT,
+      payload:movie,
+  }).then((res)=>{
+      setMovies(res);
+      push(`/movies/${movie.id}`);
+  })
   };
 
   const { title, director, genre, metascore, description } = movie;

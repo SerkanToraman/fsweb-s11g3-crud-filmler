@@ -11,34 +11,52 @@ import FavoriteMovieList from './components/FavoriteMovieList';
 import EditMovieForm from "./components/EditMovieForm";
 import { useHistory } from "react-router-dom";
 import AddMovieForm from "./components/AddMovieForm";
+import useAxios, {REQ_TYPES} from "./endpoints/useAxios";
+
 
 
 const App = (props) => {
   const [movies, setMovies] = useState([]);
   const [favoriteMovies, setFavoriteMovies] = useState([]);
   const { push }= useHistory();
+  const [getMovies,data] = useAxios();
+  const [deleteMovies]= useAxios();
 
 
   useEffect(() => {
-    axios.get('http://localhost:9000/api/movies')
-      .then(res => {
-        setMovies(res.data);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }, []);
+    // axios.get('http://localhost:9000/api/movies')
+    //   .then(res => {
+    //     setMovies(res.data);
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //   });
+
+    getMovies({
+      endpoint:"movies/",
+      reqType: REQ_TYPES.GET,
+    }).then((res)=>{
+      setMovies(data)
+    })
+  }, [data]);
 
   const deleteMovie = (id) => {
-     axios
-      .delete(`http://localhost:9000/api/movies/${id}`)
-      .then((res) => {
-        setMovies(res.data);
-        push("/movies/")
-      })
-      .catch((err) => {
-        console.log(err.response);
-      });
+    //  axios
+    //   .delete(`http://localhost:9000/api/movies/${id}`)
+    //   .then((res) => {
+    //     setMovies(res.data);
+    //     push("/movies/")
+    //   })
+    //   .catch((err) => {
+    //     console.log(err.response);
+    //   });
+    deleteMovies({
+      endpoint:`movies/${id}`,
+      reqType: REQ_TYPES.DELETE,
+    }).then((res)=>{
+          setMovies(res);
+          push("/movies");
+    })
   };
 
 

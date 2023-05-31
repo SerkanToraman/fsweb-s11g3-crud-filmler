@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
-//import useAxios, { REQ_TYPES } from "../endpoints/useAxios";
+import useAxios, { REQ_TYPES } from "../endpoints/useAxios";
 
 import axios from "axios";
 
 const AddMovieForm = (props) => {
   const { push } = useHistory();
   const { id } = useParams();
+  const [postMovie] = useAxios();
 
   const { setMovies } = props;
   const [movie, setMovie] = useState({
@@ -29,16 +30,24 @@ const AddMovieForm = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
-      .post(`http://localhost:9000/api/movies`, movie)
-      .then((res) => {
-        setMovies(res.data);
-        push(`/movies/`);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+    // axios
+    //   .post(`http://localhost:9000/api/movies`, movie)
+    //   .then((res) => {
+    //     setMovies(res.data);
+    //     push(`/movies/`);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+    postMovie({
+      endpoint:"movies/",
+      reqType:REQ_TYPES.POST,
+      payload:movie
+    }).then((res) => {
+          setMovies(res);
+          push(`/movies/`);
+        })
+    };
 
   const { title, director, genre, metascore, description } = movie;
 

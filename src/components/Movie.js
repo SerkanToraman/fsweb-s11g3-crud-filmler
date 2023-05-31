@@ -4,24 +4,32 @@ import { Link, useParams, useHistory } from "react-router-dom";
 
 import axios from "axios";
 import MovieFooter from "./MovieFooter";
+import useAxios, { REQ_TYPES } from "../endpoints/useAxios";
 
 const Movie = ( props ) => {
   const { addToFavorites, deleteMovie } = props;
 
-  const [movie, setMovie] = useState({});
+  // const [movie, setMovie] = useState({});
+  const[ getMovie,movie]=useAxios();
 
   const { id } = useParams();
   const { push } = useHistory();
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:9000/api/movies/${id}`)
-      .then((res) => {
-        setMovie(res.data);
-      })
-      .catch((err) => {
-        console.log(err.response);
-      });
+    // axios
+    //   .get(`http://localhost:9000/api/movies/${id}`)
+    //   .then((res) => {
+    //     setMovie(res.data);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err.response);
+    //   });
+    getMovie({
+      endpoint:`movies/${id}`,
+      reqType:REQ_TYPES.GET,
+    })
+
+
   }, [id]);
 
   return (
