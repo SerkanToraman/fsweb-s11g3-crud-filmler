@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 import axios from "axios";
 
-const EditMovieForm = (props) => {
+const AddMovieForm = (props) => {
   const { push } = useHistory();
   const { id } = useParams();
 
@@ -17,20 +17,6 @@ const EditMovieForm = (props) => {
     metascore: 0,
     description: "",
   });
-
-  // const [editProduct ] = useAxios([]);
-
-  useEffect(() => {
-    axios
-      .get(`http://localhost:9000/api/movies/${id}`)
-      .then((res) => {
-        setMovie(res.data);
-      })
-      .catch((err) => {
-        console.log(err.response);
-      });
-  }, []);
-
 
 
   const handleChange = (e) => {
@@ -44,10 +30,10 @@ const EditMovieForm = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .put(`http://localhost:9000/api/movies/${id}`, movie)
+      .post(`http://localhost:9000/api/movies`, movie)
       .then((res) => {
         setMovies(res.data);
-        push(`/movies/${movie.id}`);
+        push(`/movies/`);
       })
       .catch((err) => {
         console.log(err);
@@ -111,7 +97,7 @@ const EditMovieForm = (props) => {
         </div>
 
         <div className="px-5 py-4 border-t border-zinc-200 flex justify-end gap-2">
-          <Link to={`/movies/${id}`} className="myButton bg-zinc-500">
+          <Link to={`/movies/`} className="myButton bg-zinc-500">
             Vazgeç
           </Link>
           <button
@@ -126,4 +112,4 @@ const EditMovieForm = (props) => {
   );
 };
 
-export default EditMovieForm;
+export default AddMovieForm;
